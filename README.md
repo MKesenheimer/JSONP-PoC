@@ -83,7 +83,7 @@ The callback `myCallbackServer` is a JavaScript-function that takes the data rec
 http://127.0.0.1:8082/store.php
 ```
 
-If the data from the webservice was received corretly can be checked as previously by cat'ing the file `data.sav`:
+It can be checked if the data from the webservice was received corretly by cat'ing the file `data.sav`:
 ```
 docker exec -it attack-server bash
 cat /var/www/html/data/data.sav
