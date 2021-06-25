@@ -1,6 +1,6 @@
 # JSONP-PoC
 JSONP (=JSON with padding) is a special method to wrap JSON data in a JavaScript function.
-If a webervice allows requests with custom defined callback-functions, the webservice might be vulnerable to JSONP attacks.
+If a webservice allows requests with custom defined callback-functions, the webservice might be vulnerable to JSONP attacks.
 How this could be achieved, is described below.
 
 ## Starting the attack-server
