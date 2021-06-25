@@ -7,7 +7,7 @@
 header('Access-Control-Allow-Origin: *');
 
 if (isset($_POST['data']) == false) { 
-    echo('Please provide data with a POST-Request with the parameter data.'); 
+    echo('Please provide data with a POST-Request with the data parameter.'); 
     exit; 
 }
 
