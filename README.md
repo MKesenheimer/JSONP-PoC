@@ -24,7 +24,7 @@ See also `test-post.html` which can be used to make such POST requests.
 To start the server:
 ```
 cd attack-server
-docker run --rm -p 8082:80 --name attack-server --mount type=bind,source="$(pwd)",target=/var/www/html php:apache
+docker run -d --rm -p 8082:80 --name attack-server --mount type=bind,source="$(pwd)",target=/var/www/html php:apache
 ```
 The file `./data/data.sav` may still need to be given the correct permissions:
 ```
@@ -38,12 +38,6 @@ chown -R www-data:www-data data
 ```
 cd json-webserver
 docker run --rm -p 3000:3000 --name json-server -v `pwd`:/data williamyeh/json-server --watch db.json
-```
-
-## Stopping the servers
-```
-docker stop attack-server
-docker stop json-server
 ```
 
 ## Checks
@@ -66,12 +60,13 @@ http://127.0.0.1:3000/posts
 ## PoC
 Now assume the following scenario:
 If the webservice or the data served by the webservice (json-webserver) is only accessible to authorized users, there is no way to directly access this private data by an attacker. For example, accessibility to the data could be granted to users that include certain cookies or other secrets into their requests. The webservice would then respond to these requests only if the cookies are valid.
+Additionally, access to the API could be forbidden due to the Same-Origin Policy.
 
 If however the webservice allows JSONP, we could create a malicious website that makes requests from the victims browser to the vulnerable webservice. The requests sent from the victims browser would include all necessary cookies to authorize against the webservice.
 The only thing to do is to lure the victim to the malicious website.
 In our PoC the malicious website is running under
 ```
-http://127.0.0.1:8082/jsonp-attack.html
+http://127.0.0.1:8082/malicious.html
 ```
 
 If the victim opens this link, a request to the webservice with a callback parameter is made:
@@ -83,8 +78,15 @@ The callback `myCallbackServer` is a JavaScript-function that takes the data rec
 http://127.0.0.1:8082/store.php
 ```
 
-It can be checked if the data from the webservice was received corretly by cat'ing the file `data.sav`:
+It can be checked if the data from the webservice was received correctly by cat'ing the file `data.sav`:
 ```
 docker exec -it attack-server bash
 cat /var/www/html/data/data.sav
+```
+
+
+## Stopping the servers
+```
+docker stop attack-server
+docker stop json-server
 ```
